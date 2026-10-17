@@ -1,0 +1,63 @@
+<mujoco model="panda pick scene">
+  <include file="panda.xml"/>
+ 
+  <option timestep="0.002"/>
+ 
+  <visual>
+    <headlight diffuse="0.6 0.6 0.6" ambient="0.3 0.3 0.3" specular="0 0 0"/>
+    <global azimuth="150" elevation="-25"/>
+  </visual>
+ 
+  <default>
+    <default class="cube">
+      <geom type="box" size="0.02 0.02 0.02" mass="0.05" friction="1.5 0.01 0.001"/>
+    </default>
+    <default class="bin">
+      <geom type="box" rgba="0.3 0.3 0.35 1"/>
+    </default>
+  </default>
+ 
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0"
+             width="512" height="3072"/>
+    <texture type="2d" name="groundplane" builtin="checker" mark="edge" rgb1="0.2 0.3 0.4"
+             rgb2="0.1 0.2 0.3" markrgb="0.8 0.8 0.8" width="300" height="300"/>
+    <material name="groundplane" texture="groundplane" texuniform="true" texrepeat="5 5"
+              reflectance="0.2"/>
+    <material name="wood" rgba="0.55 0.4 0.25 1"/>
+  </asset>
+ 
+  <worldbody>
+    <light pos="0 0 1.5" dir="0 0 -1" directional="true"/>
+    <geom name="floor" size="0 0 0.05" type="plane" material="groundplane"/>
+ 
+    <!-- Table. size = HALF sizes. Top surface at z = 0.1 + 0.1 = 0.2 m -->
+    <geom name="table" type="box" pos="0.6 0 0.1" size="0.3 0.45 0.1" material="wood"/>
+ 
+    <!-- Bin: floor plate + 4 walls (18 x 18 cm inside, 7 cm high) -->
+    <body name="bin" pos="0.55 0.3 0.2">
+      <geom class="bin" pos="0 0 0.005"      size="0.09 0.09 0.005"/>
+      <geom class="bin" pos="0.09 0 0.035"   size="0.005 0.09 0.035"/>
+      <geom class="bin" pos="-0.09 0 0.035"  size="0.005 0.09 0.035"/>
+      <geom class="bin" pos="0 0.09 0.035"   size="0.09 0.005 0.035"/>
+      <geom class="bin" pos="0 -0.09 0.035"  size="0.09 0.005 0.035"/>
+    </body>
+ 
+    <!-- Three 4 cm cubes. freejoint = free to move anywhere; gravity pulls them down -->
+    <body name="red_cube" pos="0.5 -0.15 0.22">
+      <freejoint name="red_cube"/>
+      <geom class="cube" rgba="0.9 0.1 0.1 1"/>
+    </body>
+    <body name="green_cube" pos="0.6 -0.05 0.22">
+      <freejoint name="green_cube"/>
+      <geom class="cube" rgba="0.1 0.8 0.2 1"/>
+    </body>
+    <body name="blue_cube" pos="0.45 0.05 0.22">
+      <freejoint name="blue_cube"/>
+      <geom class="cube" rgba="0.1 0.3 0.9 1"/>
+    </body>
+    <!-- Overhead camera, 1 m above the table, looking straight down (for Phase 2) -->
+    <camera name="overhead" pos="0.55 0 1.2" xyaxes="0 -1 0 1 0 0" fovy="60"/>
+  </worldbody>
+</mujoco>
+

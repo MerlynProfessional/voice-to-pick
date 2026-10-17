@@ -1,0 +1,7 @@
+.venv/
+mujoco_menagerie/
+__pycache__/
+*.pyc
+.env
+*.pt
+*.onnx
